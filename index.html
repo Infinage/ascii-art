@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ASCII Art</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .form-container {
+      background-color: #1e1e1e;
+      padding: 1.5rem 2rem;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .inline-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .row.full-width * {
+      width: 100%;
+    }
+
+    .row label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      background-color: #2b2b2b;
+      border: 1px solid #444;
+      color: #e0e0e0;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      accent-color: #e0e0e0;
+    }
+
+    button {
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #5c6bc0;
+    }
+
+    pre {
+      margin-top: 2rem;
+      background: #1e1e1e;
+      padding: 1rem;
+      border-radius: 8px;
+      max-width: 90vw;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>ASCII Art Generator</h1>
+
+  <div class="form-container">
+    <div class="inline-row">
+      <input type="file" id="fileInput" accept="image/*" />
+      <label for="invertMapping">
+        <input type="checkbox" id="invertMapping" />
+        Invert Mapping
+      </label>
+    </div>
+
+    <div class="row full-width">
+      <label for="downscale">
+        Downscale Factor:
+        <input type="number" id="downscale" value="16" min="1" />
+      </label>
+    </div>
+
+    <div class="row full-width">
+      <button id="convertBtn">ASCIIFY</button>
+    </div>
+  </div>
+
+  <pre id="output">Upload a PNG image to see the output</pre>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const downscaleInput = document.getElementById('downscale');
+    const invertCheckbox = document.getElementById('invertMapping');
+    const output = document.getElementById('output');
+    const convertBtn = document.getElementById('convertBtn');
+
+    let byteArray = null;
+
+    fileInput.addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        byteArray = new Uint8Array(e.target.result);
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+    convertBtn.addEventListener('click', () => {
+      if (!byteArray) {
+        output.textContent = 'Please upload a valid image file first.';
+        return;
+      }
+
+      const downscale = parseInt(downscaleInput.value, 10) || 2;
+      const invert = invertCheckbox.checked;
+      const asciiArt = Module.asciify(byteArray, byteArray.length, downscale, invert);
+      output.textContent = asciiArt;
+    });
+  </script>
+
+  <script src="ascii-art.js"></script>
+</body>
+</html>

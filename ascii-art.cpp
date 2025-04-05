@@ -1,11 +1,10 @@
-// em++ ascii-art.cpp -o ascii-art.html -std=c++23 -O2 --use-port=libpng -lembind
+// em++ ascii-art.cpp -o ascii-art.js -std=c++23 -O2 --use-port=libpng -lembind -fwasm-exceptions
 // python -m http.server
 
 #include "png_reader.hpp"
 #include <emscripten/bind.h>
 
 #include <cmath>
-#include <iostream>
 #include <limits>
 #include <sstream>
 
@@ -38,12 +37,14 @@ std::array<std::uint8_t, 4> poolAvg(const std::vector<std::array<std::uint8_t, 4
     };
 }
 
-std::string asciify(const std::string  &imageBlob, std::size_t downscale, bool invertMapping = false) {
+std::string asciify(const std::string &imageBlob, std::size_t blobSize, std::size_t downscale, bool invertMapping = false) {
     try {
         // Read the image from path if provided, else read from console
-        png::Image image;
-        std::istringstream iss {imageBlob};
-        image = png::read(iss);
+        std::stringstream iss(std::ios::in | std::ios::out | std::ios::binary);
+        iss.write(imageBlob.data(), static_cast<std::streamsize>(blobSize));
+        iss.seekg(0, std::ios::beg); 
+
+        png::Image image {png::read(iss)};
 
         // Convert RGBA into a single valued 2D vector, store min - max for normalization
         std::size_t opHeight {image.height / downscale}, opWidth {image.width / downscale};
@@ -79,8 +80,7 @@ std::string asciify(const std::string  &imageBlob, std::size_t downscale, bool i
     } 
 
     catch (std::exception &ex) {
-        std::cerr << "ASCII Art Error: " << ex.what() << '\n';
-        return "";
+        return ex.what();
     }
 }
 
