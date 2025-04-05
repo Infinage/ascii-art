@@ -1,6 +1,8 @@
-// em++ ascii-art.cpp -o ascii-art.wasm -std=c++23 -O2 --use-port=libpng
+// em++ ascii-art.cpp -o ascii-art.html -std=c++23 -O2 --use-port=libpng -lembind
+// python -m http.server
 
 #include "png_reader.hpp"
+#include <emscripten/bind.h>
 
 #include <cmath>
 #include <iostream>
@@ -80,4 +82,9 @@ std::string asciify(const std::string  &imageBlob, std::size_t downscale, bool i
         std::cerr << "ASCII Art Error: " << ex.what() << '\n';
         return "";
     }
+}
+
+// Add EMSCRIPTEN Bindings to expose to javascript
+EMSCRIPTEN_BINDINGS(my_module) {
+    emscripten::function("asciify", &asciify);
 }
