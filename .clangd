@@ -1,0 +1,12 @@
+CompileFlags:
+  Add:
+    - --target=wasm32-unknown-emscripten
+    - --sysroot=/home/kael/bin/emsdk/upstream/emscripten/cache/sysroot
+    - -DEMSCRIPTEN
+    - -Xclang
+    - -iwithsysroot/include/fakesdl
+    - -Xclang
+    - -iwithsysroot/include/compat
+    - -std=c++23
+    - -I/home/kael/bin/emsdk/upstream/emscripten/cache/sysroot/include
+    - -I/home/kael/bin/emsdk/upstream/emscripten/system/include
