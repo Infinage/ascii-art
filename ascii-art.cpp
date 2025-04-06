@@ -9,7 +9,7 @@
 #include <sstream>
 
 // Define density as a seq of chars
-constexpr std::string_view DENSITY {" _.,-=+:;cba!?0123456789$W#@Ñ"};
+constexpr std::string_view DENSITY {" _.,-=+:;cba!?0123456789$W#@"};
 
 // Map each cell to a corresponding character in the Density string
 inline char mapPixel(const double val, const double min, const double max, bool invert = false) {
@@ -72,7 +72,7 @@ std::string asciify(const std::string &imageBlob, std::size_t blobSize, std::siz
         result.reserve(grayscaled.size() * (grayscaled[0].size() + 1));
         for (const std::vector<double> &row: grayscaled) {
             for (const double &pixel: row)
-                result.push_back(mapPixel(pixel, min, max, invertMapping)) ;
+                result.push_back(mapPixel(pixel, min, max, invertMapping));
             result.push_back('\n');
         }
 
