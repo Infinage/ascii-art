@@ -1,6 +1,3 @@
-// em++ ascii-art.cpp -o ascii-art.js -std=c++23 -O2 --use-port=libpng -lembind -fwasm-exceptions
-// python -m http.server
-
 #include "png_reader.hpp"
 #include <emscripten/bind.h>
 
