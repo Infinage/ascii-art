@@ -2,7 +2,10 @@
 FROM emscripten/emsdk:latest as builder
 WORKDIR /app
 COPY . .
-RUN em++ ascii-art.cpp -o ascii-art.js -std=c++23 -O2 --use-port=libpng -lembind -fwasm-exceptions
+RUN em++ ascii-art.cpp -o ascii-art.js -std=c++23 -O2 \
+--use-port=libpng -lembind -fwasm-exceptions \
+-s INITIAL_MEMORY=16MB -s MAXIMUM_MEMORY=32MB \
+-s ALLOW_MEMORY_GROWTH=1
 
 # Stage #2
 FROM busybox:latest

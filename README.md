@@ -1,6 +1,7 @@
 # ASCII Art Generator (CPP + WASM)
 
-A simple web app that converts PNG images to ASCII art — powered by C++ compiled to WebAssembly.
+A simple web app that converts PNG images to ASCII art — powered by C++ compiled to WebAssembly.  
+🔗 **Live Demo:** [ascii-art.deesa.space](http://ascii-art.deesa.space/)
 
 ## How it Works
 
@@ -12,7 +13,12 @@ A simple web app that converts PNG images to ASCII art — powered by C++ compil
 ## 🛠️ Build & Run (Locally with Emscripten)
 
 ```bash
-em++ ascii-art.cpp -o ascii-art.js -std=c++23 -O2 --use-port=libpng -lembind -fwasm-exceptions
+# Compile with em++ from emsdk
+em++ ascii-art.cpp -o ascii-art.js -std=c++23 -O2 --use-port=libpng \
+    -lembind -s INITIAL_MEMORY=16MB -s MAXIMUM_MEMORY=32MB \
+    -s ALLOW_MEMORY_GROWTH=1
+
+# Spin up some webserver
 python -m http.server
 ```
 
