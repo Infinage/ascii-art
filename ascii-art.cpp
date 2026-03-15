@@ -1,4 +1,4 @@
-#include "png_reader.hpp"
+#include "image_reader.hpp"
 #include <emscripten/bind.h>
 
 #include <cmath>
@@ -41,7 +41,7 @@ std::string asciify(const std::string &imageBlob, std::size_t blobSize, std::siz
         iss.write(imageBlob.data(), static_cast<std::streamsize>(blobSize));
         iss.seekg(0, std::ios::beg); 
 
-        png::Image image {png::read(iss)};
+        image::Image image {image::read(iss)};
 
         // Convert RGBA into a single valued 2D vector, store min - max for normalization
         std::size_t opHeight {image.height / downscale}, opWidth {image.width / downscale};
